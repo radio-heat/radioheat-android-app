@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        tools:context="com.pb.radioheatmapclient.MainActivity" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="Picker"
+            android:layout_height="wrap_content"
+            android:id="@+id/cmdlocateMe"
+            android:layout_width="125dp" />
+
+        <Button
+            android:text="Export"
+            android:layout_height="wrap_content"
+            android:id="@+id/cmdExportData"
+            android:layout_width="125dp" />
+
+        <Button
+            android:text="WiFi Scannen"
+            android:layout_height="wrap_content"
+            android:id="@+id/cmdScanWifi"
+            android:layout_width="125dp"
+            android:layout_row="0"
+            android:layout_column="2" />
+
+    </GridLayout>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/txtOutput"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:editable="true"
+        android:fitsSystemWindows="false"
+        android:saveEnabled="true"
+        android:textAllCaps="false"
+        android:enabled="true"
+        android:fadeScrollbars="true"
+        android:filterTouchesWhenObscured="false"
+        android:accessibilityTraversalAfter="@+id/cmdExportData" />
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/band_overview"
+        android:layout_width="match_parent"
+        android:layout_height="18dp" />
+
+</LinearLayout>
