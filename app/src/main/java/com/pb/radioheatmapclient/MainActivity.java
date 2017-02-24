@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView txtOutput = null;
     private LatLng messpunkt;
     private JSONArray ScanDaten = null;
-    protected String serverIP = "http://82.165.75.129:8080";
+    protected String serverIP = "http://82.165.75.129:8080/add";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
