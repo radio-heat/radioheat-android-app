@@ -1,63 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="482dp"
-        tools:context="com.pb.radioheatmapclient.MainActivity" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_gravity="top|left"
+            android:id="@+id/cmdlocateMe"
+            android:padding="5dp"
+            android:paddingRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="Pick" />
+
+        <Button
+            android:layout_gravity="top|left"
+            android:id="@+id/cmdScanWifi"
+            android:padding="5dp"
+            android:paddingRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="46dp"
+            android:text="Scan" />
+
+        <Button
+            android:id="@+id/cmdExportData"
+            android:padding="5dp"
+            android:paddingRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="91dp"
+            android:text="Send" />
+    </fragment>
 
     <GridLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
-        <Button
-            android:text="Picker"
-            android:layout_height="wrap_content"
-            android:id="@+id/cmdlocateMe"
-            android:layout_width="125dp" />
-
-        <Button
-            android:text="WiFi Scannen"
-            android:layout_height="wrap_content"
-            android:id="@+id/cmdScanWifi"
-            android:layout_width="125dp"
-            android:layout_row="0"
-            android:layout_column="2" />
-
-        <Button
-            android:text="Export"
-            android:layout_height="wrap_content"
-            android:id="@+id/cmdExportData"
-            android:layout_width="125dp" />
 
     </GridLayout>
 
     <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/txtOutput"
-        android:clickable="true"
-        android:contextClickable="true"
-        android:editable="true"
-        android:fitsSystemWindows="false"
-        android:saveEnabled="true"
-        android:textAllCaps="false"
         android:enabled="true"
+        android:id="@+id/txtOutput"
+        android:fitsSystemWindows="false"
+        android:clickable="true"
+        android:saveEnabled="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:editable="true"
         android:fadeScrollbars="true"
         android:filterTouchesWhenObscured="false"
-        android:accessibilityTraversalAfter="@+id/cmdExportData" />
+        android:textAllCaps="false"
+        android:accessibilityTraversalAfter="@+id/cmdExportData"
+        android:contextClickable="true" />
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/band_overview"
+    <include
+        android:id="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="18dp" />
-
+        android:layout_height="100dp"
+        layout="@layout/toolbar" />
 </LinearLayout>
