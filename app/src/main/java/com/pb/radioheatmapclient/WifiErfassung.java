@@ -1,11 +1,16 @@
 package com.pb.radioheatmapclient;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import android.content.Context;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,23 +31,64 @@ public class WifiErfassung {
         this.cont = context;
     }
 
-    public JSONArray scannen() {
+    public JSONArray scannen(LatLng messpunkt){
         WifiManager wifiManager = (WifiManager) cont.getSystemService(Context.WIFI_SERVICE);
-        JSONArray ScanDaten = new JSONArray();
-        //if (hasWifi) {
-            for(ScanResult scandat : wifiManager.getScanResults()) {
-                JSONObject scanResult = new JSONObject();
+
+        JSONArray measurementdata = new JSONArray();
+
+        Date now= new Date();
+        SimpleDateFormat format_day = new SimpleDateFormat("dd");
+        SimpleDateFormat format_mounth = new SimpleDateFormat("MM");
+        SimpleDateFormat format_year = new SimpleDateFormat("yyyy");
+        SimpleDateFormat format_hour = new SimpleDateFormat("hh");
+        SimpleDateFormat format_minute = new SimpleDateFormat("mm");
+        SimpleDateFormat format_second = new SimpleDateFormat("ss");
+        // Für jede Messung einen Zeitstempel
+        JSONObject datetime = new JSONObject();
+        try{
+            // Zeitstempel JSON Objekt mit Seperierten Daten befüllt
+            datetime.put("day", Integer.parseInt(format_day.format(now)));
+            datetime.put("month",Integer.parseInt(format_mounth.format(now)));
+            datetime.put("year",Integer.parseInt(format_year.format(now)));
+            datetime.put("hour",Integer.parseInt(format_hour.format(now)));
+            datetime.put("minute",Integer.parseInt(format_minute.format(now)));
+            datetime.put("second",Integer.parseInt(format_second.format(now)));
+            // Zeitstempel als JSON Objekt in das JSON ARRAY
+            measurementdata.put(datetime);
+        } catch (JSONException e) {
+            if (debugging == true) {
+                System.out.println("Fehler SCAN2JSON " + e);
+            }
+        }
+        if (messpunkt != null) {
+            JSONObject location = new JSONObject();
+            try{
+                location.put( "latitude", messpunkt.latitude);
+                location.put("longitude", messpunkt.longitude);
+                location.put("storey", 0 );
+                measurementdata.put(location);
+            } catch (JSONException e) {
+                if (debugging == true) {
+                    System.out.println("Fehler SCAN2JSON " + e);
+                }
+            }
+        } else {
+            System.out.println("keine location");
+        }
+
+        for(ScanResult scandat : wifiManager.getScanResults()) {
+                // Für Jedes Netzwerk einen eigenen Datensatz
+                JSONObject wlanNetwork = new JSONObject();
                 try {
-                    scanResult.put("Date", time);
-                    scanResult.put("SSID", scandat.SSID);
-                    scanResult.put("BSSID", scandat.BSSID);
-                    scanResult.put("Weiss es nicht", scandat.capabilities);
-                    scanResult.put("CenterFrequenz0", scandat.centerFreq0);
-                    scanResult.put("CenterFrequenz1", scandat.centerFreq1);
-                    scanResult.put("ChannalBreite", scandat.channelWidth);
-                    scanResult.put("Frequenz", scandat.frequency);
-                    scanResult.put("Level", scandat.level);
-                    ScanDaten.put(scanResult);
+                    wlanNetwork.put("bssid", scandat.BSSID);
+                    wlanNetwork.put("frequency", scandat.frequency);
+                    wlanNetwork.put("ssid", scandat.SSID);
+                    wlanNetwork.put("strength", scandat.level);
+                    //wlanNetwork.put("Weiss es nicht", scandat.capabilities);
+                    //wlanNetwork.put("CenterFrequenz0", scandat.centerFreq0);
+                    //wlanNetwork.put("CenterFrequenz1", scandat.centerFreq1);
+                    //wlanNetwork.put("ChannalBreite", scandat.channelWidth);
+                    measurementdata.put(wlanNetwork);
                 } catch (JSONException e) {
                     if (debugging == true) {
                         System.out.println("Fehler SCAN2JSON " + e);
@@ -50,8 +96,7 @@ public class WifiErfassung {
                     }
                 }
             }
-       // }
-        return ScanDaten;
+        return measurementdata;
 
                    /* //List<ScanResult> results = new ArrayList<>();
         List<ScanResult> scanres = wifiManager.getScanResults();

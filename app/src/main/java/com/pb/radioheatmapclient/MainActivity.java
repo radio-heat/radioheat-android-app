@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -62,8 +64,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Button cmdlocateMe = null;
     private TextView txtOutput = null;
     private LatLng messpunkt;
-    private JSONArray ScanDaten = null;
+    private JSONArray measurementdata = null;
     protected String serverIP = "http://82.165.75.129:8080/add";
+    private static Boolean debugging = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,15 +102,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 );
                 gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(picker, 19));
                 //TODO Implementierung
-                txtOutput.setText("Resumed");
+                if (debugging == true) {System.out.println("Resumed");}
             }
         });
         // bei Click wird eine Messung durchgeführt und Angezeigt
         cmdScanWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScanDaten = SCAN.scannen();
-                txtOutput.setText("WiFi Scan Ergenisse:" + ScanDaten);
+                if (messpunkt != null) {
+                measurementdata = SCAN.scannen(messpunkt);
+                }
+                if(debugging==true){System.out.println("WiFi Scan Ergenisse:" + measurementdata);}
             }
         });
         // bei Click wird eine Messung durchgeführt und soll dann in die Datenbank mit LatLng geschrieben werden
@@ -115,16 +120,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 if (messpunkt == null) {
-                    txtOutput.setText("Position wählen");
+                    if (debugging == true) {System.out.println("Position wählen");}
                 } else {
-                    new JSONTask().execute(serverIP, ScanDaten.toString(), "was");
-                    txtOutput.setText("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scannen() + "TODO Datenbankanbindung");
+                    new JSONTask().execute(serverIP, measurementdata.toString(), "was");
+                    if (debugging == true) {System.out.println("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scannen(messpunkt) + "TODO Datenbankanbindung");}
                 }
             }
 
             private void writeStream(OutputStream out) {
-                txtOutput.setText("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scannen() + "TODO Datenbankanbindung");
-
+                if (debugging == true) {System.out.println("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scannen(messpunkt) + "TODO Datenbankanbindung");}
             }
         });
     }
