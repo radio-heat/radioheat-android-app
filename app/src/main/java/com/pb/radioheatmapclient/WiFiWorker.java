@@ -1,14 +1,8 @@
 package com.pb.radioheatmapclient;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import android.content.Context;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,14 +10,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.google.android.gms.R.id.time;
+import static com.pb.radioheatmapclient.MainActivity.debugging;
 
 /**
- * Created by pbaes on 23.11.2016.
+ * Created by Patrick Bäselt on 23.11.2016
+ * - Erfassung der Daten mit WiFiManger
+ * - Ausgleider der Zeitstempels in Timestamp.java
+ * - JSON gepackter Export der Daten
  */
 public class WifiErfassung {
-    //Aktiviert das Debugen in dem Task //TODO: Debuging deaktivieren
-    private static Boolean debugging = true;
+    //Aktiviert das Debugen in dem Task
 
     private Context cont;
 
@@ -33,33 +29,10 @@ public class WifiErfassung {
 
     public JSONArray scannen(LatLng messpunkt){
         WifiManager wifiManager = (WifiManager) cont.getSystemService(Context.WIFI_SERVICE);
-
         JSONArray measurementdata = new JSONArray();
+        measurementdata.put(Timebase.get());
 
-        Date now= new Date();
-        SimpleDateFormat format_day = new SimpleDateFormat("dd");
-        SimpleDateFormat format_mounth = new SimpleDateFormat("MM");
-        SimpleDateFormat format_year = new SimpleDateFormat("yyyy");
-        SimpleDateFormat format_hour = new SimpleDateFormat("hh");
-        SimpleDateFormat format_minute = new SimpleDateFormat("mm");
-        SimpleDateFormat format_second = new SimpleDateFormat("ss");
-        // Für jede Messung einen Zeitstempel
-        JSONObject datetime = new JSONObject();
-        try{
-            // Zeitstempel JSON Objekt mit Seperierten Daten befüllt
-            datetime.put("day", Integer.parseInt(format_day.format(now)));
-            datetime.put("month",Integer.parseInt(format_mounth.format(now)));
-            datetime.put("year",Integer.parseInt(format_year.format(now)));
-            datetime.put("hour",Integer.parseInt(format_hour.format(now)));
-            datetime.put("minute",Integer.parseInt(format_minute.format(now)));
-            datetime.put("second",Integer.parseInt(format_second.format(now)));
-            // Zeitstempel als JSON Objekt in das JSON ARRAY
-            measurementdata.put(datetime);
-        } catch (JSONException e) {
-            if (debugging == true) {
-                System.out.println("Fehler SCAN2JSON " + e);
-            }
-        }
+        // Übergabe per Handfixierter Messpunkt
         if (messpunkt != null) {
             JSONObject location = new JSONObject();
             try{
@@ -73,7 +46,7 @@ public class WifiErfassung {
                 }
             }
         } else {
-            System.out.println("keine location");
+            System.out.println("WiFi Error: keine location");
         }
 
         for(ScanResult scandat : wifiManager.getScanResults()) {
