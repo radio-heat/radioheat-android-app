@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +15,7 @@ import static com.pb.radioheatmapclient.MainActivity.debugging;
  * - Erfassung der Daten mit WiFiManger
  * - JSON-Array mit wlanNetworks wird zurückgegeben
  */
+
 public class WiFiWorker {
     //Aktiviert das Debugen in dem Task
     private Context cont;
@@ -42,7 +41,6 @@ public class WiFiWorker {
                 //wlanNetwork.put("CenterFrequenz1", scandat.centerFreq1);
                 //wlanNetwork.put("ChannalBreite", scandat.channelWidth);
                 wlanNetworks.put(wlanNetwork);
-                if (debugging == true) {System.out.println("WiFiWorker info: creating JSON-wlanNetwork DatensatzNr"+i+" is OK");}
             } catch (JSONException e) {
                 if (debugging == true) {System.out.println("WiFiWorker error: creating JSON-wlanNetwork DatensatzNr"+i+"   "+ e);continue;}
             }

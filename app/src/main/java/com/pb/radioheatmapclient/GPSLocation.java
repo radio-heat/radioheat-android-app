@@ -12,7 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
-public class GPSErfassung implements LocationListener {
+public class GPSLocation implements LocationListener {
 
     private final Context c;
 
@@ -26,7 +26,7 @@ public class GPSErfassung implements LocationListener {
     //Die Variable LocationManager wird später benötigt und ermöglicht die Positionsbestimmung
     protected LocationManager locationManager;
 
-    public GPSErfassung(Context context) {
+    public GPSLocation(Context context) {
         this.c = context;
     }
 
@@ -57,7 +57,7 @@ public class GPSErfassung implements LocationListener {
             if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            locationManager.removeUpdates(GPSErfassung.this);
+            locationManager.removeUpdates(GPSLocation.this);
         }
     }
 
