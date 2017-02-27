@@ -56,9 +56,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /*
     Deklarationen und Initalisierungen
     */
+    public static Boolean debugging = false;   //TODO: Debuging deaktivieren
     private GoogleMap gMap;
     private GPSErfassung GPS;
-    private WifiErfassung SCAN;
+    private WiFiWorker SCAN;
     private Button cmdScanWifi = null;
     private Button cmdExportData = null;
     private Button cmdlocateMe = null;
@@ -66,7 +67,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng messpunkt;
     private JSONArray measurementdata = null;
     protected String serverIP = "http://82.165.75.129:8080/add";
-    private static Boolean debugging = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +79,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         GPS = new GPSErfassung(this);
         GPS.setPosition();
         // Erzeugen WifiScanOnjekts
-        SCAN = new WifiErfassung(this);
+        SCAN = new WiFiWorker(this);
         // Anlegen der Buttons
         cmdlocateMe = (Button) findViewById(R.id.cmdlocateMe);
         cmdExportData = (Button) findViewById(R.id.cmdExportData);
@@ -110,9 +110,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 if (messpunkt != null) {
-                measurementdata = SCAN.scannen(messpunkt);
+                    measurementdata = SCAN.scan();
                 }
-                if(debugging==true){System.out.println("WiFi Scan Ergenisse:" + measurementdata);}
+                if(debugging==true){System.out.println("WiFi Scan Ergenisse:" + SCAN.scan());}
             }
         });
         // bei Click wird eine Messung durchgeführt und soll dann in die Datenbank mit LatLng geschrieben werden
@@ -122,13 +122,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (messpunkt == null) {
                     if (debugging == true) {System.out.println("Position wählen");}
                 } else {
-                    new JSONTask().execute(serverIP, measurementdata.toString(), "was");
-                    if (debugging == true) {System.out.println("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scannen(messpunkt) + "TODO Datenbankanbindung");}
+                    new JSONTask().execute(serverIP, Export.get(messpunkt,SCAN.scan()).toString(), "was");
+                    if (debugging == true) {System.out.println("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scan() + "TODO Datenbankanbindung");}
                 }
             }
 
             private void writeStream(OutputStream out) {
-                if (debugging == true) {System.out.println("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scannen(messpunkt) + "TODO Datenbankanbindung");}
+                if (debugging == true) {System.out.println("Export Datensatz: " + messpunkt.latitude + " " + messpunkt.longitude + " " + java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()) + " " + SCAN.scan() + "TODO Datenbankanbindung");}
             }
         });
     }

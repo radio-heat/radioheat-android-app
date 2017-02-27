@@ -14,7 +14,7 @@ import static com.pb.radioheatmapclient.MainActivity.debugging;
 
 public class Timebase {
 
-    public JSONObject get() {
+    public static JSONObject get() {
         Date now = new Date();
         SimpleDateFormat format_day = new SimpleDateFormat("dd");
         SimpleDateFormat format_mounth = new SimpleDateFormat("MM");
@@ -32,12 +32,12 @@ public class Timebase {
             datetime.put("hour", Integer.parseInt(format_hour.format(now)));
             datetime.put("minute", Integer.parseInt(format_minute.format(now)));
             datetime.put("second", Integer.parseInt(format_second.format(now)));
-            // Zeitstempel als JSON Objekt in das JSON ARRAY
-            return datetime;
+            if (debugging == true) {System.out.println("Timebase Info: creating JSON-Datetimestamp is OK");}
         } catch (JSONException e) {
-            if (debugging == true) {
-                System.out.println("Error: creating JSON-Datetimestamp" + e);
-            }
+            if (debugging == true) {System.out.println("Timebase Error: creating JSON-Datetimestamp" + e);}
+        } finally {
+            // Zeitstempel als Rückgabewert
+            return datetime;
         }
     }
 }

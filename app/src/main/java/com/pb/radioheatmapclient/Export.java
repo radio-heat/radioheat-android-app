@@ -14,9 +14,9 @@ import static com.pb.radioheatmapclient.MainActivity.debugging;
  * Created by s153102 on 27.02.17.
  */
 
-public class ExportData {
+public class Export {
 
-    public JSONArray get (LatLng messpunkt){
+    public static JSONArray get (LatLng messpunkt, JSONArray wlanNetworks){
           // Messdatensatz als JSON Array erstellen.
         JSONArray measurementdata = new JSONArray();
         // Zeitstempel zum Messdatensatz hinzufügen
@@ -39,11 +39,10 @@ public class ExportData {
             }
 
         } else {
-            System.out.println("WiFi Error: keine location");
+            System.out.println("Export Error: keine location");
         }
-
-
-
-    JSONArray
+        measurementdata.put(wlanNetworks);
+        return measurementdata;
+    }
 }
 
