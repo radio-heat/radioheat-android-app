@@ -1,12 +1,11 @@
 package com.pb.radioheatmapclient;
 
-import android.content.Context;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONException;
+
 
 import static com.pb.radioheatmapclient.MainActivity.debugging;
 
@@ -16,12 +15,15 @@ import static com.pb.radioheatmapclient.MainActivity.debugging;
 
 public class Export {
 
-    public static JSONArray get (LatLng messpunkt, JSONArray wlanNetworks){
+    public static JSONObject get (LatLng messpunkt, JSONArray wlanNetworks){
           // Messdatensatz als JSON Array erstellen.
-        JSONArray measurementdata = new JSONArray();
+        JSONObject measurementdata = new JSONObject();
         // Zeitstempel zum Messdatensatz hinzufügen
-        measurementdata.put(Timebase.get());
-        if (debugging == true) {System.out.println("Export Info: adding JSON-Datetimestamp is OK");}
+        try{
+            measurementdata.put("datetime",Timebase.get());
+        } catch (JSONException e) {
+        if (debugging == true) { System.out.println("Export Error: on adding datetime " + e);}
+        }
         // Übergabe per Handfixierter Messpunkt
         if (messpunkt != null) {
             JSONObject location = new JSONObject();
@@ -32,7 +34,7 @@ public class Export {
                 location.put("storey", 0 ); //ToDo: Unterstützung für Stockwerke
                 if (debugging == true) {System.out.println("Export Info: creating JSON-Locationstamp is OK");}
                 // Location zum Messdatensatz hinzufühgen.
-                measurementdata.put(location);
+                measurementdata.put("location",location);
                 if (debugging == true) {System.out.println("Export Info: adding JSON-Locationstamp is OK");}
             }
             catch (JSONException e) {
@@ -42,7 +44,12 @@ public class Export {
         } else {
             System.out.println("Export Error: keine location");
         }
-        measurementdata.put(wlanNetworks);
+        try {
+            measurementdata.put("wlanNetworks", wlanNetworks);
+        } catch (JSONException e) {
+            if (debugging == true) { System.out.println("Export Error: on adding WlanNetworks " + e);}
+        }
+
         return measurementdata;
     }
 }

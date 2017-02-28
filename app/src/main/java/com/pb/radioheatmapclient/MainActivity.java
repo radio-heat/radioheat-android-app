@@ -24,9 +24,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import java.util.List;
 

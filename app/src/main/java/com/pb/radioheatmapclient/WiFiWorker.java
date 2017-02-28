@@ -13,7 +13,7 @@ import static com.pb.radioheatmapclient.MainActivity.debugging;
 /**
  * Created by Patrick Bäselt on 23.11.2016
  * - Erfassung der Daten mit WiFiManger
- * - JSON-Array mit wlanNetworks wird zurückgegeben
+ * - JSON-Objekt mit wlanNetworks wird zurückgegeben
  */
 
 public class WiFiWorker {
@@ -45,7 +45,7 @@ public class WiFiWorker {
                 if (debugging == true) {System.out.println("WiFiWorker error: creating JSON-wlanNetwork DatensatzNr"+i+"   "+ e);continue;}
             }
         }
-        System.out.println("WiFiWorker info: JSON-Array wlanNetworks("+wlanNetworks.length()+") übergeben. -> " + wlanNetworks);
+        System.out.println("WiFiWorker info: JSON-Objekt wlanNetworks("+wlanNetworks.length()+") übergeben. -> " + wlanNetworks);
         i=0;
         return wlanNetworks;
     }

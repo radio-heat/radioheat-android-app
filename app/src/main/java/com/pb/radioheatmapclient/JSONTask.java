@@ -2,7 +2,7 @@ package com.pb.radioheatmapclient;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -21,7 +21,7 @@ import static com.pb.radioheatmapclient.MainActivity.debugging;
  * Created by pbaes on 29.12.2016.
  */
 
-public class JSONTask extends AsyncTask<String, JSONArray, String>{
+public class JSONTask extends AsyncTask<String, JSONObject, String>{
     //Aktiviert das Debugen in dem Task //TODO: Debuging deaktivieren
 
     @Override
@@ -45,7 +45,7 @@ public class JSONTask extends AsyncTask<String, JSONArray, String>{
         try {
             // Übergabe JSON Daten in Array mit UTF-8 Codierung
             sendenA = json.getBytes("UTF-8");
-                         if(debugging==true){System.out.println("JSONTask Info: Exportdatensatz: "+ json +"\nJSONTask Info: - Übermittlungsdatenstrom: "+sendenA);}
+                         if(debugging==true){System.out.println("JSONTask Info: Exportdatensatz: "+ json +"\nJSONTask Info: Übermittlungsdatenstrom: "+sendenA);}
             // Übergabe Parameter-0 als url vom Typ URL
             URL url = new URL(params[0]);
                         if(debugging==true){System.out.println("JSONTask Info: Sendeadresse: "+ url);}
@@ -76,6 +76,7 @@ public class JSONTask extends AsyncTask<String, JSONArray, String>{
             while ((zeile = reader.readLine()) != null) {
                 System.out.println("JSONTask Info: Serverantwort: " + zeile+ " \n");
             }
+
         }
         catch (MalformedURLException e) {
             System.out.println("JSONTask Error: 01 MalformURLExpetion "+e);
